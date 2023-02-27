@@ -7,7 +7,7 @@ import {
   validateSync,
 } from 'class-validator';
 import { plainToClass } from 'class-transformer';
-import { EventPollerConfig } from './interfaces/config.interfaces';
+import { PollerConfig } from './interfaces/config.interfaces';
 
 export class EnvironmentVariables {
   @IsString()
@@ -29,7 +29,7 @@ export class ConfigService {
     this.env = this.validateConfig();
   }
 
-  getPollerConfig(): EventPollerConfig {
+  getPollerConfig(): PollerConfig {
     return {
       provider: this.env.WEB3_PROVIDER,
       contractAddress: this.env.CONTRACT_ADDRESS,
