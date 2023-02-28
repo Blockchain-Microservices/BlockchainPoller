@@ -1,5 +1,6 @@
 # ENVs
 .env
+k8s/*.env.yml
 
 # compiled output
 /dist

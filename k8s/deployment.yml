@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poller-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: poller
+  template:
+    metadata:
+     labels:
+       app: poller
+    spec:
+      containers:
+      - name: poller
+        image: poller:3.2
+        imagePullPolicy: Never
+        envFrom:
+        - configMapRef:
+            name: poller-env
+        ports:
+          - containerPort: 3000
