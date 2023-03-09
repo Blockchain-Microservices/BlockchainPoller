@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: poller
-        image: poller:3.2
+        image: poller:latest
         imagePullPolicy: Never
         envFrom:
         - configMapRef:
