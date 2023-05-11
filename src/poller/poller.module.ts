@@ -4,6 +4,7 @@ import factoryAbi from '../abi/factory.abi';
 import { ConfigService } from '../config/config.service';
 import { PollerConfig } from '../config/interfaces/config.interfaces';
 import { ConfigModule } from '../config/config.module';
+import { TokenManagerModule } from '../token-manager/token-manager.module';
 
 const abi: Provider = {
   provide: 'ABI',
@@ -18,7 +19,7 @@ const pollerConfig: Provider = {
 };
 
 @Module({
-  imports: [ConfigModule],
+  imports: [ConfigModule, TokenManagerModule],
   providers: [PollerService, abi, pollerConfig],
 })
 export class PollerModule {}

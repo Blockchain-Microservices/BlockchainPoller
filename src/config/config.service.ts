@@ -7,7 +7,10 @@ import {
   validateSync,
 } from 'class-validator';
 import { plainToClass } from 'class-transformer';
-import { PollerConfig } from './interfaces/config.interfaces';
+import {
+  PollerConfig,
+  TokenManagerConfig,
+} from './interfaces/config.interfaces';
 
 export class EnvironmentVariables {
   @IsString()
@@ -21,6 +24,10 @@ export class EnvironmentVariables {
   @IsNumber()
   @IsOptional()
   START_BLOCK?: number;
+
+  @IsString()
+  @IsNotEmpty()
+  TOKEN_MANAGER_URL: string;
 }
 
 @Injectable()
@@ -34,6 +41,12 @@ export class ConfigService {
       provider: this.env.WEB3_PROVIDER,
       contractAddress: this.env.CONTRACT_ADDRESS,
       startBlock: this.env.START_BLOCK && +this.env.START_BLOCK,
+    };
+  }
+
+  getTokenManagerConfig(): TokenManagerConfig {
+    return {
+      url: this.env.TOKEN_MANAGER_URL,
     };
   }
 

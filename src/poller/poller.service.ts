@@ -3,6 +3,12 @@ import { Cron } from '@nestjs/schedule';
 import { BigNumber, ethers } from 'ethers';
 import { LogDescription } from 'ethers/lib/utils';
 import { PollerConfig } from '../config/interfaces/config.interfaces';
+import { TokenManagerService } from '../token-manager/token-manager.service';
+
+export type TokenDeployedEvent = {
+  token: string;
+  deployer: string;
+};
 
 export const bigNumberConverter = (arg: BigNumber) => arg.toString();
 
@@ -21,6 +27,7 @@ export class PollerService implements OnModuleInit {
   constructor(
     @Inject('ABI') private readonly abi: ethers.ContractInterface,
     @Inject('POLLER_CONFIG') private readonly config: PollerConfig,
+    private readonly tokenManagerService: TokenManagerService,
   ) {
     this.provider = new ethers.providers.JsonRpcProvider(config.provider);
     this.contract = new ethers.Contract(
@@ -93,13 +100,21 @@ export class PollerService implements OnModuleInit {
 
     for (const event of events) {
       const parsedEvent = this.iface.parseLog(event);
-      const args = this.parseEventArgs(parsedEvent);
+      const args: TokenDeployedEvent = this.parseEventArgs(
+        parsedEvent,
+      ) as TokenDeployedEvent;
 
       Logger.log(
         `${parsedEvent.name}: ${JSON.stringify(args)}; tx ${
           event.transactionHash
         }`,
       );
+
+      await this.tokenManagerService.updateToken({
+        txHash: event.transactionHash,
+        address: args.token,
+        deployer: args.deployer,
+      });
     }
   }
 }

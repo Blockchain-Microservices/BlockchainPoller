@@ -3,3 +3,7 @@ export interface PollerConfig {
   contractAddress: string;
   startBlock: number;
 }
+
+export interface TokenManagerConfig {
+  url: string;
+}
